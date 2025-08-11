@@ -13,7 +13,7 @@
 
     <div class="container shadow p-3 mt-5 bg-body-tertiary rounded">
         <h1 class="mt-4 text-center">Registation From</h1>
-        <form action="{{ url('/register') }}" method="post">
+        <form action="{{ url(!empty($studentData->id ?? null) && $studentData->id ? '/update/'.$studentData->id: '/register') }}" method="post">
             @csrf
             <div class="row">
                 <div class="mb-3">

@@ -49,7 +49,7 @@ class RegisterController extends Controller
             'gender' => $request->gender,
         ]);
 
-        // return "From Submitted";
+        return redirect('student');
     }
 
 
@@ -74,13 +74,6 @@ class RegisterController extends Controller
             return view('new.form')->with($data);
         } else
             return redirect()->back();
-
-        $studentData = StudentModel::find($empId);
-        if (!is_null($studentData)) {
-            $data = compact('studentData');
-            return view('new.form')->with($data);
-        } else
-            return redirect()->back();
     }
 
     /**
@@ -93,10 +86,9 @@ class RegisterController extends Controller
         $studentData->email = $request['email'];
         $studentData->mobile = $request['mobile'];
         $studentData->gender = $request['gender'];
-        $studentData->joining = $request['joining'];
 
         $studentData->save();
-        return redirect('view');
+        return redirect('student');
     }
 
     /**
