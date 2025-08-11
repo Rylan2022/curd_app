@@ -13,7 +13,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -38,7 +38,7 @@ class RegisterController extends Controller
 
         $latest = StudentModel::latest('id')->first();
         $nextId = $latest ? $latest->id + 1 : 1;
-        $empId = 'EMP'.str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        $empId = 'EMP' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
 
         StudentModel::create([
             'empId' => $empId,
@@ -56,7 +56,8 @@ class RegisterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(){
+    public function show()
+    {
         $studentData = StudentModel::latest()->get();
         return view('new.view', compact('studentData'));
     }
@@ -67,12 +68,19 @@ class RegisterController extends Controller
     public function edit(string $empId)
     {
         $studentData = StudentModel::find($empId);
-        
-        if(!is_null($studentData)){
+
+        if (!is_null($studentData)) {
             $data = compact('studentData');
             return view('new.form')->with($data);
-        }else
-        return redirect()->back();
+        } else
+            return redirect()->back();
+
+        $studentData = StudentModel::find($empId);
+        if (!is_null($studentData)) {
+            $data = compact('studentData');
+            return view('new.form')->with($data);
+        } else
+            return redirect()->back();
     }
 
     /**
@@ -82,14 +90,29 @@ class RegisterController extends Controller
     {
         $studentData = StudentModel::find($empId);
         $studentData->fullname = $request['fullname'];
-        @$studentData->email = $request['email'];
+        $studentData->email = $request['email'];
+        $studentData->mobile = $request['mobile'];
+        $studentData->gender = $request['gender'];
+        $studentData->joining = $request['joining'];
+
+        $studentData->save();
+        return redirect('view');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $empId)
     {
-        //
+        $studentData = StudentModel::find($empId);
+
+        if (!is_null($studentData)) {
+            $studentData->delete();
+            return redirect()->back();
+        } else {
+            return redirect()->back();
+        }
+
+
     }
 }
